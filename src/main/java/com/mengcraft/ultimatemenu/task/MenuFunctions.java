@@ -20,7 +20,7 @@ public class MenuFunctions {
    public static boolean Functions(Player var0, int var1) {
       MenuFormat var2 = PlayerMenu.getPlayerFormat(var0);
       if(var2.itemMap.keySet().contains(Integer.valueOf(var1))) {
-         ArrayList var3 = ((ItemFormat)var2.itemMap.get(Integer.valueOf(var1))).commands;
+         ArrayList var3 = ((ItemFormat)var2.itemMap.get(Integer.valueOf(var1))).commandList;
          BungeeTP(var3, var0);
          asOP(var0, var3);
          asConsole(var3, var0);

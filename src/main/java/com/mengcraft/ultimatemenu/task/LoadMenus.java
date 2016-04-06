@@ -13,7 +13,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
 public class LoadMenus {
-    
+
     private static Plugin pl;
     private static HashMap<String, MenuFormat> menuMap;
 
@@ -28,145 +28,111 @@ public class LoadMenus {
 
     public static void load() {
         menuMap.clear();
-        ArrayList<String> ymlName = new ArrayList<>();
-        ArrayList var1 = new ArrayList();
-        File[] var5;
-        int var4 = (var5 = (new File(pl.getDataFolder() + File.separator + "Menus")).listFiles()).length;
 
-        for (int var3 = 0; var3 < var4; ++var3) {
-            File ymlFile = var5[var3];
-            if (ymlName.contains(ymlFile.getName())) {
-                System.out.print("[UltimateMenu] You have 2 menu files with the name " + ymlFile.getName() + "!");
+        ArrayList<String> fileNameList = new ArrayList<>();
+        ArrayList<String> menuNameList = new ArrayList<>();
+
+        File[] fileList = new File(pl.getDataFolder() + File.separator + "Menus").listFiles();
+        for (File file : fileList != null ? fileList : new File[]{}) {
+            if (fileNameList.contains(file.getName())) {
+                System.out.print("[UltimateMenu] You have 2 menu files with the name " + file.getName() + "!");
                 System.out.print("Not loading one!");
             } else {
-                ymlName.add(ymlFile.getName());
-                YamlConfiguration yml = YamlConfiguration.loadConfiguration(ymlFile);
+                fileNameList.add(file.getName());
+                YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
+
                 MenuFormat format = new MenuFormat();
                 format.slot = yml.getInt("Menu.Slots");
-                format.title = yml.getString("Menu.Menu_Name").replaceAll("&", "§");
-                ArrayList var8 = new ArrayList();
-                ArrayList var9 = new ArrayList();
-                HashMap var10 = new HashMap();
-                Iterator var12 = yml.getKeys(false).iterator();
+                format.name = yml.getString("Menu.Menu_Name").replaceAll("&", "§");
 
-                while (true) {
-                    while (var12.hasNext()) {
-                        String var11 = (String) var12.next();
-                        if (var11.equalsIgnoreCase("Menu")) {
-                            String var13 = yml.getString("Menu.Menu_Name");
-                            if (var1.contains(var13)) {
-                                System.out.print("[UltimateMenu] You have 2 menu files with the same title \'" + var13 + "\'");
-                                System.out.print("Please change to load the 2 menus!");
-                                continue;
-                            }
+                HashMap<String, Integer> slotMap = new HashMap<>();
 
-                            var1.add(var13);
+                ArrayList<ItemFormat> itemList = new ArrayList<>();
+                ArrayList<String> itemNameList = new ArrayList<>();
+
+                for (String itemName : yml.getKeys(false)) {
+                    if (itemName.equalsIgnoreCase("Menu")) {
+                        String menuName = yml.getString("Menu.Menu_Name");
+                        if (menuNameList.contains(menuName)) {
+                            throw new RuntimeException("Multiple menu with same title " + menuName + '!');
                         }
+                        menuNameList.add(menuName);
+                    } else {
+                        if (itemNameList.contains(itemName)) {
+                            throw new RuntimeException("Multiple item " + itemName + " on menu " + file.getName() + '!');
+                        }
+                        itemNameList.add(itemName);
+                        int slot = yml.getInt(itemName + ".Slot");
+                        if (slotMap.containsValue(slot)) {
+                            throw new RuntimeException("Multiple slot " + slot + " on menu " + file.getName() + '!');
+                        }
+                        slotMap.put(itemName, slot);
+                        ItemFormat item = new ItemFormat();
+                        item.id = file.getName() + "-" + itemName;
+                        item.onlineNameList.addAll(yml.getStringList(itemName + ".Name_Online"));
+                        item.offlineNameList.addAll(yml.getStringList(itemName + ".Name_Offline"));
+                        item.fullNameList.addAll(yml.getStringList(itemName + ".Name_Full"));
 
-                        if (!var11.equalsIgnoreCase("Menu")) {
-                            if (var9.contains(var11)) {
-                                System.out.print("[UltimateMenu] The item " + var11 + " on Menu " + ymlFile.getName() + " has set 2 times! Please change !");
-                            } else {
-                                var9.add(var11);
-                                int var20 = yml.getInt(var11 + ".Slot");
-                                Iterator var16;
-                                if (!var10.containsValue(Integer.valueOf(var20))) {
-                                    var10.put(var11, Integer.valueOf(var20));
-                                    ItemFormat item = new ItemFormat();
-                                    item.id = ymlFile.getName() + "-" + var11;
-                                    item.onlineNames.addAll(yml.getStringList(var11 + ".Name_Online"));
-                                    item.offlineNames.addAll(yml.getStringList(var11 + ".Name_Offline"));
-                                    item.FullNames.addAll(yml.getStringList(var11 + ".Name_Full"));
-                                    String var22;
-                                    if (yml.isSet(var11 + ".Lore_Online")) {
-                                        var16 = yml.getConfigurationSection(var11 + ".Lore_Online").getKeys(false).iterator();
-
-                                        while (var16.hasNext()) {
-                                            var22 = (String) var16.next();
-                                            item.onlineMotd.add(yml.getStringList(var11 + ".Lore_Online." + var22));
-                                        }
-                                    }
-
-                                    if (yml.isSet(var11 + ".Lore_Offline")) {
-                                        var16 = yml.getConfigurationSection(var11 + ".Lore_Offline").getKeys(false).iterator();
-
-                                        while (var16.hasNext()) {
-                                            var22 = (String) var16.next();
-                                            item.offlineMotd.add(yml.getStringList(var11 + ".Lore_Offline." + var22));
-                                        }
-                                    }
-
-                                    if (yml.isSet(var11 + ".Lore_Full")) {
-                                        var16 = yml.getConfigurationSection(var11 + ".Lore_Full").getKeys(false).iterator();
-
-                                        while (var16.hasNext()) {
-                                            var22 = (String) var16.next();
-                                            item.FullMotd.add(yml.getStringList(var11 + ".Lore_Full." + var22));
-                                        }
-                                    }
-
-                                    if (yml.isSet(var11 + ".ID_Full")) {
-                                        item.ID_Full = yml.getInt(var11 + ".ID_Full");
-                                    }
-                                    if (yml.isSet(var11 + ".Motd_Full_Exp")) {
-                                        item.motdField = yml.getString(var11 + ".Motd_Full_Exp");
-                                        item.idMotdFull = yml.getInt(var11 + ".ID_Motd_Full", 35);
-                                        item.dataMotdFull = yml.getInt(var11 + ".Data_Motd_Full", 1);
-                                        item.motdFullNames.addAll(yml.getStringList(var11 + ".Name_Motd_Full"));
-                                    }
-                                    item.ID_Offline = yml.getInt(var11 + ".ID_Offline");
-                                    item.ID_Online = yml.getInt(var11 + ".ID_Online");
-                                    if (yml.isSet(var11 + ".DATA_Full")) {
-                                        item.DATA_Full = yml.getInt(var11 + ".DATA_Full");
-                                    }
-
-                                    item.DATA_Offline = yml.getInt(var11 + ".DATA_Offline");
-                                    item.DATA_Online = yml.getInt(var11 + ".DATA_Online");
-                                    item.Close_On_Click = yml.getBoolean(var11 + ".CloseMenu");
-                                    String[] var18;
-                                    int var17 = (var18 = yml.getString(var11 + ".Commands").split(";")).length;
-
-                                    for (int var23 = 0; var23 < var17; ++var23) {
-                                        var22 = var18[var23];
-                                        item.commands.add(var22);
-                                    }
-
-                                    item.Show_Players_On_Item_Amount = yml.getBoolean(var11 + ".Show_Players_On_Item_Amount");
-                                    item.Slot = yml.getInt(var11 + ".Slot");
-                                    item.awaysOnline = yml.getBoolean(var11 + ".AwaysOnline");
-                                    var8.add(item);
-                                } else {
-                                    System.out.print("[UltimateMenu] You have 2 menu items with the same slot ocuped!");
-                                    String var14 = "";
-                                    var16 = var10.entrySet().iterator();
-
-                                    while (var16.hasNext()) {
-                                        Entry var15 = (Entry) var16.next();
-                                        if (((Integer) var15.getValue()).intValue() == var20) {
-                                            var14 = (String) var15.getKey();
-                                        }
-                                    }
-
-                                    System.out.print("File: " + ymlFile.getName() + " Menu Item: " + var11 + " , " + var14);
-                                    System.out.print("Please change to load the 2 items!");
-                                }
+                        if (yml.isSet(itemName + ".Lore_Online")) {
+                            for (String line : yml.getConfigurationSection(itemName + ".Lore_Online").getKeys(false)) {
+                                item.onlineMotd.add(yml.getStringList(itemName + ".Lore_Online." + line));
                             }
                         }
+
+                        if (yml.isSet(itemName + ".Lore_Offline")) {
+                            for (String o : yml.getConfigurationSection(itemName + ".Lore_Offline").getKeys(false)) {
+                                item.offlineMotd.add(yml.getStringList(itemName + ".Lore_Offline." + o));
+                            }
+                        }
+
+                        if (yml.isSet(itemName + ".Lore_Full")) {
+                            for (String o : yml.getConfigurationSection(itemName + ".Lore_Full").getKeys(false)) {
+                                item.FullMotd.add(yml.getStringList(itemName + ".Lore_Full." + o));
+                            }
+                        }
+
+                        if (yml.isSet(itemName + ".ID_Full")) {
+                            item.ID_Full = yml.getInt(itemName + ".ID_Full");
+                        }
+
+                        if (yml.isSet(itemName + ".Motd_Full_Exp")) {
+                            item.motdField = yml.getString(itemName + ".Motd_Full_Exp");
+                            item.idMotdFull = yml.getInt(itemName + ".ID_Motd_Full", 35);
+                            item.dataMotdFull = yml.getInt(itemName + ".Data_Motd_Full", 1);
+                            item.motdFullNameList.addAll(yml.getStringList(itemName + ".Name_Motd_Full"));
+                        }
+
+                        item.ID_Offline = yml.getInt(itemName + ".ID_Offline");
+                        item.ID_Online = yml.getInt(itemName + ".ID_Online");
+
+                        if (yml.isSet(itemName + ".DATA_Full")) {
+                            item.DATA_Full = yml.getInt(itemName + ".DATA_Full");
+                        }
+
+                        item.DATA_Offline = yml.getInt(itemName + ".DATA_Offline");
+                        item.DATA_Online = yml.getInt(itemName + ".DATA_Online");
+                        item.Close_On_Click = yml.getBoolean(itemName + ".CloseMenu");
+
+                        String[] commandList = yml.getString(itemName + ".Commands").split(";");
+                        for (String command : commandList) {
+                            item.commandList.add(command);
+                        }
+
+                        item.Show_Players_On_Item_Amount = yml.getBoolean(itemName + ".Show_Players_On_Item_Amount");
+                        item.slot = yml.getInt(itemName + ".Slot");
+                        item.awaysOnline = yml.getBoolean(itemName + ".AwaysOnline");
+
+                        itemList.add(item);
                     }
-
-                    var12 = var8.iterator();
-
-                    while (var12.hasNext()) {
-                        ItemFormat var19 = (ItemFormat) var12.next();
-                        format.itemMap.put(Integer.valueOf(var19.Slot), var19);
-                    }
-
-                    menuMap.put(ymlFile.getName().replace(".yml", ""), format);
-                    break;
                 }
+
+                for (ItemFormat item : itemList) {
+                    format.itemMap.put(item.slot, item);
+                }
+
+                menuMap.put(file.getName().replace(".yml", ""), format);
             }
         }
-
     }
 
     public static void config(FileConfiguration var0, File var1) {
