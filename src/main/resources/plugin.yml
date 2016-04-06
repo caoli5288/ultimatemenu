@@ -1,0 +1,10 @@
+name: UltimateMenu
+author: Matheus9171, caoli5288
+version: 2.1
+softdepend: [PlaceholderAPI]
+main: com.mengcraft.ultimatemenu.Main
+commands:
+    ultimatemenu:
+      description: Main Command
+    um:
+      description: Main Command Aliase
