@@ -5,14 +5,12 @@ import com.mengcraft.ultimatemenu.Main;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.Plugin;
 
-public class LoadMenus {
+public class LoadMenu {
 
     private static Plugin pl;
     private static HashMap<String, MenuFormat> menuMap;
@@ -87,7 +85,7 @@ public class LoadMenus {
 
                         if (yml.isSet(itemName + ".Lore_Full")) {
                             for (String o : yml.getConfigurationSection(itemName + ".Lore_Full").getKeys(false)) {
-                                item.FullMotd.add(yml.getStringList(itemName + ".Lore_Full." + o));
+                                item.fullMotd.add(yml.getStringList(itemName + ".Lore_Full." + o));
                             }
                         }
 

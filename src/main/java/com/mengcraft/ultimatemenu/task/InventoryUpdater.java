@@ -17,7 +17,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public class InventoryUpdater {
-    public static Inventory getInvInfos(Player var0, Inventory var1, MenuFormat var2) {
+
+    public static Inventory getInvInfo(Player var0, Inventory var1, MenuFormat var2) {
         HashMap var3 = new HashMap();
 
         int var7;
@@ -27,7 +28,6 @@ public class InventoryUpdater {
             ItemFormat var6 = (ItemFormat) var4.getValue();
             var7 = ((Integer) var4.getKey()).intValue();
             String var8 = var6.id;
-            var9 = null;
             if (var6.awaysOnline) {
                 var9 = getItemStack(var6, var8, true, var0);
                 var3.put(Integer.valueOf(var7), updateInfo(var6, var8, true));
@@ -63,18 +63,24 @@ public class InventoryUpdater {
     }
 
     private static ItemStack getItemStack(ItemFormat itemFormat, String serverId, boolean alwaysOnline, Player p) {
-        Material material = null;
-        byte data = 0;
-        int online = 1;
+        Material material;
+        byte data;
+        int online;
+
         if (itemFormat.Show_Players_On_Item_Amount && ServersInfo.getServerOnlinePlayers(serverId) != -1) {
             online = ServersInfo.getServerOnlinePlayers(serverId);
+        } else {
+            online = 1;
         }
 
-        ArrayList var7 = new ArrayList();
-        String var8 = "";
-        String loreLineRaw;
+        ArrayList<String> motdList = new ArrayList<>();
+
         Iterator<String> loreList;
+
+        String nameLine;
+        String loreLineRaw;
         String loreLine;
+
         if (alwaysOnline) {
             material = Material.getMaterial(itemFormat.ID_Online);
             data = (byte) itemFormat.DATA_Online;
@@ -83,10 +89,10 @@ public class InventoryUpdater {
             while (loreList.hasNext()) {
                 loreLineRaw = loreList.next();
                 loreLine = VariablesUtils.getFinished(loreLineRaw, serverId, p);
-                var7.add(loreLine);
+                motdList.add(loreLine);
             }
 
-            var8 = VariablesUtils.getFinished((String) itemFormat.onlineNameList.get(itemFormat.onlineFrameNames), serverId, p);
+            nameLine = VariablesUtils.getFinished(itemFormat.onlineNameList.get(itemFormat.onlineFrameNames), serverId, p);
         } else {
             if (ServersInfo.getServerPing(serverId) == -1.0D) {
                 material = Material.getMaterial(itemFormat.ID_Offline);
@@ -96,37 +102,35 @@ public class InventoryUpdater {
                 while (loreList.hasNext()) {
                     loreLineRaw = loreList.next();
                     loreLine = VariablesUtils.getFinished(loreLineRaw, serverId, p);
-                    var7.add(loreLine);
+                    motdList.add(loreLine);
                 }
 
-                var8 = VariablesUtils.getFinished((String) itemFormat.offlineNameList.get(itemFormat.offlineFrameNames), serverId, p);
-            }
-
-            if (ServersInfo.getServerPing(serverId) != -1.0D) {
-                if (ServersInfo.getServerMaxPlayers(serverId) == ServersInfo.getServerOnlinePlayers(serverId) && !itemFormat.FullMotd.isEmpty() && !itemFormat.fullNameList.isEmpty()) {
+                nameLine = VariablesUtils.getFinished(itemFormat.offlineNameList.get(itemFormat.offlineFrameNames), serverId, p);
+            } else {
+                if (ServersInfo.getServerMaxPlayers(serverId) == ServersInfo.getServerOnlinePlayers(serverId) && !itemFormat.fullMotd.isEmpty() && !itemFormat.fullNameList.isEmpty()) {
                     material = Material.getMaterial(itemFormat.ID_Full);
                     data = (byte) itemFormat.DATA_Full;
-                    loreList = ((List) itemFormat.FullMotd.get(itemFormat.fullFrame)).iterator();
+                    loreList = ((List) itemFormat.fullMotd.get(itemFormat.fullFrame)).iterator();
 
                     while (loreList.hasNext()) {
                         loreLineRaw = loreList.next();
                         loreLine = VariablesUtils.getFinished(loreLineRaw, serverId, p);
-                        var7.add(loreLine);
+                        motdList.add(loreLine);
                     }
 
-                    var8 = VariablesUtils.getFinished((String) itemFormat.fullNameList.get(itemFormat.fullFrameNames), serverId, p);
+                    nameLine = VariablesUtils.getFinished(itemFormat.fullNameList.get(itemFormat.fullFrameNames), serverId, p);
                 } else if (itemFormat.motdField != null && ServersInfo.getServerMotd(serverId).contains(itemFormat.motdField)) {
                     material = Material.getMaterial(itemFormat.idMotdFull);
                     data = (byte) itemFormat.dataMotdFull;
-                    loreList = ((List) itemFormat.FullMotd.get(itemFormat.fullFrame)).iterator();
+                    loreList = ((List) itemFormat.fullMotd.get(itemFormat.fullFrame)).iterator();
 
                     while (loreList.hasNext()) {
                         loreLineRaw = loreList.next();
                         loreLine = VariablesUtils.getFinished(loreLineRaw, serverId, p);
-                        var7.add(loreLine);
+                        motdList.add(loreLine);
                     }
 
-                    var8 = VariablesUtils.getFinished((String) itemFormat.onlineNameList.get(itemFormat.onlineFrameNames), serverId, p);
+                    nameLine = VariablesUtils.getFinished(itemFormat.motdFullNameList.get(itemFormat.onlineFrameNames), serverId, p);
                 } else {
                     material = Material.getMaterial(itemFormat.ID_Online);
                     data = (byte) itemFormat.DATA_Online;
@@ -135,20 +139,20 @@ public class InventoryUpdater {
                     while (loreList.hasNext()) {
                         loreLineRaw = loreList.next();
                         loreLine = VariablesUtils.getFinished(loreLineRaw, serverId, p);
-                        var7.add(loreLine);
+                        motdList.add(loreLine);
                     }
 
-                    var8 = VariablesUtils.getFinished((String) itemFormat.onlineNameList.get(itemFormat.onlineFrameNames), serverId, p);
+                    nameLine = VariablesUtils.getFinished(itemFormat.onlineNameList.get(itemFormat.onlineFrameNames), serverId, p);
                 }
             }
         }
 
-        ItemStack var12 = new ItemStack(material, online, data);
-        ItemMeta var13 = var12.getItemMeta();
-        var13.setDisplayName(var8);
-        var13.setLore(var7);
-        var12.setItemMeta(var13);
-        return var12;
+        ItemStack item = new ItemStack(material, online, data);
+        ItemMeta meta = item.getItemMeta();
+        meta.setDisplayName(nameLine);
+        meta.setLore(motdList);
+        item.setItemMeta(meta);
+        return item;
     }
 
     private static ItemFormat updateInfo(ItemFormat var0, String var1, boolean var2) {
@@ -183,7 +187,7 @@ public class InventoryUpdater {
 
             if (ServersInfo.getServerPing(var1) != -1.0D) {
                 if (ServersInfo.getServerMaxPlayers(var1) == ServersInfo.getServerOnlinePlayers(var1)) {
-                    if (var0.FullMotd.size() - 1 == var0.fullFrame) {
+                    if (var0.fullMotd.size() - 1 == var0.fullFrame) {
                         var0.fullFrame = 0;
                     } else {
                         ++var0.fullFrame;

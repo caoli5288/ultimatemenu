@@ -29,7 +29,7 @@ public class ItemFormat {
     int offlineFrame = 0;
     ArrayList<String> fullNameList = new ArrayList<>();
     int fullFrameNames = 0;
-    ArrayList<List<String>> FullMotd = new ArrayList<>();
+    ArrayList<List<String>> fullMotd = new ArrayList<>();
     int fullFrame = 0;
     int idMotdFull;
     int dataMotdFull;
