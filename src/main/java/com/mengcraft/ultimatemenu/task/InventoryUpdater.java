@@ -26,14 +26,14 @@ public class InventoryUpdater {
         for (Iterator var5 = var2.itemMap.entrySet().iterator(); var5.hasNext(); var1.setItem(var7, var9)) {
             Entry var4 = (Entry) var5.next();
             ItemFormat var6 = (ItemFormat) var4.getValue();
-            var7 = ((Integer) var4.getKey()).intValue();
+            var7 = (Integer) var4.getKey();
             String var8 = var6.id;
             if (var6.awaysOnline) {
                 var9 = getItemStack(var6, var8, true, var0);
-                var3.put(Integer.valueOf(var7), updateInfo(var6, var8, true));
+                var3.put(var7, updateInfo(var6, var8, true));
             } else {
                 var9 = getItemStack(var6, var8, false, var0);
-                var3.put(Integer.valueOf(var7), updateInfo(var6, var8, false));
+                var3.put(var7, updateInfo(var6, var8, false));
             }
         }
 
