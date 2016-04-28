@@ -1,6 +1,6 @@
 package com.mengcraft.ultimatemenu.task;
 
-import com.mengcraft.ultimatemenu.ping.ServersInfo;
+import com.mengcraft.ultimatemenu.ping.ServerInfo;
 import com.mengcraft.ultimatemenu.text.VariablesUtils;
 
 import java.util.ArrayList;
@@ -67,8 +67,8 @@ public class InventoryUpdater {
         byte data;
         int online;
 
-        if (itemFormat.Show_Players_On_Item_Amount && ServersInfo.getServerOnlinePlayers(serverId) != -1) {
-            online = ServersInfo.getServerOnlinePlayers(serverId);
+        if (itemFormat.Show_Players_On_Item_Amount && ServerInfo.getServerOnline(serverId) != -1) {
+            online = ServerInfo.getServerOnline(serverId);
         } else {
             online = 1;
         }
@@ -94,7 +94,7 @@ public class InventoryUpdater {
 
             nameLine = VariablesUtils.getFinished(itemFormat.onlineNameList.get(itemFormat.onlineFrameNames), serverId, p);
         } else {
-            if (ServersInfo.getServerPing(serverId) == -1.0D) {
+            if (ServerInfo.getServerLag(serverId) == -1.0D) {
                 material = Material.getMaterial(itemFormat.ID_Offline);
                 data = (byte) itemFormat.DATA_Offline;
                 loreList = ((List) itemFormat.offlineMotd.get(itemFormat.offlineFrame)).iterator();
@@ -107,7 +107,7 @@ public class InventoryUpdater {
 
                 nameLine = VariablesUtils.getFinished(itemFormat.offlineNameList.get(itemFormat.offlineFrameNames), serverId, p);
             } else {
-                if (ServersInfo.getServerMaxPlayers(serverId) == ServersInfo.getServerOnlinePlayers(serverId) && !itemFormat.fullMotd.isEmpty() && !itemFormat.fullNameList.isEmpty()) {
+                if (ServerInfo.getServerMax(serverId) == ServerInfo.getServerOnline(serverId) && !itemFormat.fullMotd.isEmpty() && !itemFormat.fullNameList.isEmpty()) {
                     material = Material.getMaterial(itemFormat.ID_Full);
                     data = (byte) itemFormat.DATA_Full;
                     loreList = ((List) itemFormat.fullMotd.get(itemFormat.fullFrame)).iterator();
@@ -119,7 +119,7 @@ public class InventoryUpdater {
                     }
 
                     nameLine = VariablesUtils.getFinished(itemFormat.fullNameList.get(itemFormat.fullFrameNames), serverId, p);
-                } else if (itemFormat.motdField != null && ServersInfo.getServerMotd(serverId).contains(itemFormat.motdField)) {
+                } else if (itemFormat.motdField != null && ServerInfo.getServerMessage(serverId).contains(itemFormat.motdField)) {
                     material = Material.getMaterial(itemFormat.idMotdFull);
                     data = (byte) itemFormat.dataMotdFull;
                     loreList = ((List) itemFormat.fullMotd.get(itemFormat.fullFrame)).iterator();
@@ -171,7 +171,7 @@ public class InventoryUpdater {
 
             return var0;
         } else {
-            if (ServersInfo.getServerPing(var1) == -1.0D) {
+            if (ServerInfo.getServerLag(var1) == -1.0D) {
                 if (var0.offlineMotd.size() - 1 == var0.offlineFrame) {
                     var0.offlineFrame = 0;
                 } else {
@@ -185,8 +185,8 @@ public class InventoryUpdater {
                 }
             }
 
-            if (ServersInfo.getServerPing(var1) != -1.0D) {
-                if (ServersInfo.getServerMaxPlayers(var1) == ServersInfo.getServerOnlinePlayers(var1)) {
+            if (ServerInfo.getServerLag(var1) != -1.0D) {
+                if (ServerInfo.getServerMax(var1) == ServerInfo.getServerOnline(var1)) {
                     if (var0.fullMotd.size() - 1 == var0.fullFrame) {
                         var0.fullFrame = 0;
                     } else {

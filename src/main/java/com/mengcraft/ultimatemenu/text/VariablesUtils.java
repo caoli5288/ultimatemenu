@@ -1,7 +1,7 @@
 package com.mengcraft.ultimatemenu.text;
 
 import com.mengcraft.ultimatemenu.Main;
-import com.mengcraft.ultimatemenu.ping.ServersInfo;
+import com.mengcraft.ultimatemenu.ping.ServerInfo;
 import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
@@ -51,13 +51,13 @@ public class VariablesUtils {
     }
 
     public static String BungeeVariables(String var0, String var1) {
-        var0 = var0.replace("{Ping}", String.valueOf(ServersInfo.getServerPing(var1)));
-        var0 = var0.replace("{Online}", String.valueOf(ServersInfo.getServerOnlinePlayers(var1)));
-        if (ServersInfo.getServerMotd(var1) != null) {
-            var0 = var0.replace("{Motd}", ServersInfo.getServerMotd(var1).replaceAll("&", "§"));
+        var0 = var0.replace("{Ping}", String.valueOf(ServerInfo.getServerLag(var1)));
+        var0 = var0.replace("{Online}", String.valueOf(ServerInfo.getServerOnline(var1)));
+        if (ServerInfo.getServerMessage(var1) != null) {
+            var0 = var0.replace("{Motd}", ServerInfo.getServerMessage(var1).replaceAll("&", "§"));
         }
 
-        var0 = var0.replace("{Max}", String.valueOf(ServersInfo.getServerMaxPlayers(var1)));
+        var0 = var0.replace("{Max}", String.valueOf(ServerInfo.getServerMax(var1)));
         return var0;
     }
 }

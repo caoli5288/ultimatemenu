@@ -7,8 +7,8 @@ import com.mengcraft.ultimatemenu.listener.InventoryCloseaListener;
 import com.mengcraft.ultimatemenu.listener.InventoryListener;
 import com.mengcraft.ultimatemenu.task.LoadMenu;
 import com.mengcraft.ultimatemenu.task.PlayerMenu;
-import com.mengcraft.ultimatemenu.ping.SchedulerPing;
-import com.mengcraft.ultimatemenu.ping.ServersInfo;
+import com.mengcraft.ultimatemenu.ping.PingTask;
+import com.mengcraft.ultimatemenu.ping.ServerInfo;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,8 +66,8 @@ public class Main extends JavaPlugin implements Listener {
       this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
       (new SchedulerFix()).runTaskTimer(this, 0L, 20L);
       (new PlayerMenu()).runTaskTimerAsynchronously(this, 0L, (long)pl.getConfig().getInt("Menu_Update_Time"));
-      (new SchedulerPing()).runTaskTimerAsynchronously(this, 0L, (long)(pl.getConfig().getInt("Ping_Delay_Seconds") * 20));
-      ServersInfo.registerServers();
+      (new PingTask()).runTaskTimerAsynchronously(this, 0L, (long)(pl.getConfig().getInt("Ping_Delay_Seconds") * 20));
+      ServerInfo.init();
       LoadMenu.load();
       pl.getConfig().options().copyDefaults(true);
       pl.saveConfig();
@@ -243,7 +243,7 @@ public class Main extends JavaPlugin implements Listener {
                      return false;
                   } else {
                      PlayerMenu.quitAllPlayers();
-                     ServersInfo.registerServers();
+                     ServerInfo.init();
                      LoadMenu.load();
                      var13.sendMessage("§aConfig reloaded!");
                      return false;
