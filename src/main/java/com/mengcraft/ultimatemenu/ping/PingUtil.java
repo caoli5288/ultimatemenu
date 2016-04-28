@@ -10,6 +10,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.logging.Logger;
 
 import static org.bukkit.util.NumberConversions.toInt;
 
@@ -26,7 +27,7 @@ final class PingUtil {
         stop.start();
 
         try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(host, port), 1);
+            socket.connect(new InetSocketAddress(host, port), 1000);
 
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -50,8 +51,7 @@ final class PingUtil {
 
             out.write(EXIT);
             out.flush();
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch (Exception ignore) {
         } finally {
             response.setLag(stop.getTime());
         }
