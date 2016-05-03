@@ -85,7 +85,7 @@ public class MenuManager {
 
                         if (yml.isSet(itemName + ".Motd_Full_Exp")) {
                             item.motdFull = yml.getString(itemName + ".Motd_Full_Exp");
-                            item.idMotdFull = yml.getInt(itemName + ".ID_Motd_Full", 35);
+                            item.motdFullId = yml.getInt(itemName + ".ID_Motd_Full", 35);
                             item.dataMotdFull = yml.getInt(itemName + ".Data_Motd_Full", 1);
                             item.motdFullNameList.addAll(yml.getStringList(itemName + ".Name_Motd_Full"));
                         }

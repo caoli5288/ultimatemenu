@@ -18,18 +18,18 @@ public class MenuItemFormat {
     ArrayList<String> commandList = new ArrayList<>();
     ArrayList<String> onlineNameList = new ArrayList<>();
     ArrayList<String> motdFullNameList = new ArrayList<>();
-    int onlineFrameNames = 0;
+    int onlineFrameName = 0;
     ArrayList<List<String>> onlineMotd = new ArrayList<>();
     int onlineFrame = 0;
     ArrayList<String> offlineNameList = new ArrayList<>();
-    int offlineFrameNames = 0;
+    int offlineFrameName = 0;
     ArrayList<List<String>> offlineMotd = new ArrayList<>();
     int offlineFrame = 0;
     ArrayList<String> fullNameList = new ArrayList<>();
-    int fullFrameNames = 0;
+    int fullFrameName = 0;
     ArrayList<List<String>> fullMotd = new ArrayList<>();
     int fullFrame = 0;
-    int idMotdFull;
+    int motdFullId;
     int dataMotdFull;
     String motdFull;
 }

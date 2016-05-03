@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class InventoryUpdater {
+public class InventoryUtil {
 
     public static Inventory getInventory(Player p, Inventory content, MenuFormat format) {
         HashMap<Integer, MenuItemFormat> itemMap = new HashMap<>();
@@ -71,7 +71,7 @@ public class InventoryUpdater {
                 motdList.add(loreLine);
             }
 
-            nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameNames), serverId, p);
+            nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameName), serverId, p);
         } else {
             if (ServerInfo.getLag(serverId) == -1) {
                 material = Material.getMaterial(format.ID_Offline);
@@ -84,7 +84,7 @@ public class InventoryUpdater {
                     motdList.add(loreLine);
                 }
 
-                nameLine = TextUtil.getFinished(format.offlineNameList.get(format.offlineFrameNames), serverId, p);
+                nameLine = TextUtil.getFinished(format.offlineNameList.get(format.offlineFrameName), serverId, p);
             } else {
                 if (ServerInfo.getServerMax(serverId) == ServerInfo.getServerOnline(serverId) && !format.fullMotd.isEmpty() && !format.fullNameList.isEmpty()) {
                     material = Material.getMaterial(format.ID_Full);
@@ -97,9 +97,9 @@ public class InventoryUpdater {
                         motdList.add(loreLine);
                     }
 
-                    nameLine = TextUtil.getFinished(format.fullNameList.get(format.fullFrameNames), serverId, p);
+                    nameLine = TextUtil.getFinished(format.fullNameList.get(format.fullFrameName), serverId, p);
                 } else if (format.motdFull != null && ServerInfo.getServerMessage(serverId).contains(format.motdFull)) {
-                    material = Material.getMaterial(format.idMotdFull);
+                    material = Material.getMaterial(format.motdFullId);
                     data = (byte) format.dataMotdFull;
                     loreList = ((List) format.fullMotd.get(format.fullFrame)).iterator();
 
@@ -109,7 +109,7 @@ public class InventoryUpdater {
                         motdList.add(loreLine);
                     }
 
-                    nameLine = TextUtil.getFinished(format.motdFullNameList.get(format.onlineFrameNames), serverId, p);
+                    nameLine = TextUtil.getFinished(format.motdFullNameList.get(format.onlineFrameName), serverId, p);
                 } else {
                     material = Material.getMaterial(format.ID_Online);
                     data = (byte) format.DATA_Online;
@@ -121,7 +121,7 @@ public class InventoryUpdater {
                         motdList.add(loreLine);
                     }
 
-                    nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameNames), serverId, p);
+                    nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameName), serverId, p);
                 }
             }
         }
@@ -142,10 +142,10 @@ public class InventoryUpdater {
                 ++format.onlineFrame;
             }
 
-            if (format.onlineNameList.size() - 1 == format.onlineFrameNames) {
-                format.onlineFrameNames = 0;
+            if (format.onlineNameList.size() - 1 == format.onlineFrameName) {
+                format.onlineFrameName = 0;
             } else {
-                ++format.onlineFrameNames;
+                ++format.onlineFrameName;
             }
 
             return format;
@@ -157,10 +157,10 @@ public class InventoryUpdater {
                     ++format.offlineFrame;
                 }
 
-                if (format.offlineNameList.size() - 1 == format.offlineFrameNames) {
-                    format.offlineFrameNames = 0;
+                if (format.offlineNameList.size() - 1 == format.offlineFrameName) {
+                    format.offlineFrameName = 0;
                 } else {
-                    ++format.offlineFrameNames;
+                    ++format.offlineFrameName;
                 }
             }
 
@@ -172,10 +172,10 @@ public class InventoryUpdater {
                         ++format.fullFrame;
                     }
 
-                    if (format.fullNameList.size() - 1 == format.fullFrameNames) {
-                        format.fullFrameNames = 0;
+                    if (format.fullNameList.size() - 1 == format.fullFrameName) {
+                        format.fullFrameName = 0;
                     } else {
-                        ++format.fullFrameNames;
+                        ++format.fullFrameName;
                     }
                 } else {
                     if (format.onlineMotd.size() - 1 == format.onlineFrame) {
@@ -184,10 +184,10 @@ public class InventoryUpdater {
                         ++format.onlineFrame;
                     }
 
-                    if (format.onlineNameList.size() - 1 == format.onlineFrameNames) {
-                        format.onlineFrameNames = 0;
+                    if (format.onlineNameList.size() - 1 == format.onlineFrameName) {
+                        format.onlineFrameName = 0;
                     } else {
-                        ++format.onlineFrameNames;
+                        ++format.onlineFrameName;
                     }
                 }
             }

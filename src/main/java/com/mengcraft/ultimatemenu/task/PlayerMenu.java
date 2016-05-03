@@ -27,7 +27,7 @@ public class PlayerMenu extends BukkitRunnable {
                 String var4 = (String) var5.next();
                 Player var6 = Bukkit.getPlayerExact(var4);
                 if (var6 != null) {
-                    InventoryUpdater.getInventory(var6, (Inventory) var2.get(var4), (MenuFormat) var3.get(var4));
+                    InventoryUtil.getInventory(var6, (Inventory) var2.get(var4), (MenuFormat) var3.get(var4));
                     var6.updateInventory();
                 }
             }
@@ -62,7 +62,7 @@ public class PlayerMenu extends BukkitRunnable {
         if (menuFormat == null) {
             System.out.print("The menu: " + menuName + " Don't exist and the player: " + p.getName() + " Are trying to open!");
         } else {
-            Inventory menu = InventoryUpdater.init(p, menuFormat);
+            Inventory menu = InventoryUtil.init(p, menuFormat);
             playerMenu.put(p.getName(), menu);
             playerLayout.put(p.getName(), menuFormat);
             p.openInventory(menu);
