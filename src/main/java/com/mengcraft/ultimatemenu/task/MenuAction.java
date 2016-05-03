@@ -17,8 +17,8 @@ public class MenuAction {
       pl = Main.pl;
    }
 
-   public static boolean Functions(Player var0, int var1) {
-      MenuFormat var2 = PlayerMenu.getPlayerFormat(var0);
+   public static boolean process(Player var0, int var1) {
+      MenuFormat var2 = PlayerMenu.getFormat(var0);
       if(var2.itemMap.keySet().contains(Integer.valueOf(var1))) {
          ArrayList var3 = ((MenuItemFormat)var2.itemMap.get(Integer.valueOf(var1))).commandList;
          BungeeTP(var3, var0);

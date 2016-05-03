@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -15,6 +16,13 @@ import java.util.Iterator;
 import java.util.List;
 
 public class InventoryUtil {
+
+    public static final InventoryHolder HOLDER = new InventoryHolder() {
+        @Override
+        public Inventory getInventory() {
+            return null;
+        }
+    };
 
     public static Inventory getInventory(Player p, Inventory content, MenuFormat format) {
         HashMap<Integer, MenuItemFormat> itemMap = new HashMap<>();
@@ -32,7 +40,7 @@ public class InventoryUtil {
     }
 
     public static Inventory init(Player p, MenuFormat menuFormat) {
-        Inventory menu = Bukkit.createInventory(p, menuFormat.slot, menuFormat.name);
+        Inventory menu = Bukkit.createInventory(HOLDER, menuFormat.slot, menuFormat.name);
         menuFormat.getItemMap().forEach((slot, format) -> {
             ItemStack item = getItem(format, format.id, p);
             menu.setItem(slot, item);

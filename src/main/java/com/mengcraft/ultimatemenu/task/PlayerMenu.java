@@ -5,21 +5,23 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerMenu extends BukkitRunnable {
 
-    private static HashMap playerMenu = new HashMap();
-    private static HashMap playerLayout = new HashMap();
+    private static final HashMap<String, Inventory> PLAYER_MENU = new HashMap<>();
+    private static final HashMap<String, MenuFormat> PLAYER_LAYOUT = new HashMap<>();
 
     public void run() {
-        HashSet var1 = new HashSet(playerMenu.keySet());
+        HashSet var1 = new HashSet(PLAYER_MENU.keySet());
         HashMap var2 = new HashMap();
         HashMap var3 = new HashMap();
-        var2.putAll(playerMenu);
-        var3.putAll(playerLayout);
+        var2.putAll(PLAYER_MENU);
+        var3.putAll(PLAYER_LAYOUT);
         if (!var1.isEmpty()) {
             Iterator var5 = var1.iterator();
 
@@ -36,7 +38,7 @@ public class PlayerMenu extends BukkitRunnable {
     }
 
     public static void quitAllPlayers() {
-        Iterator var1 = playerMenu.keySet().iterator();
+        Iterator var1 = PLAYER_MENU.keySet().iterator();
 
         while (var1.hasNext()) {
             String var0 = (String) var1.next();
@@ -49,12 +51,8 @@ public class PlayerMenu extends BukkitRunnable {
 
     }
 
-    public static MenuFormat getPlayerFormat(Player var0) {
-        return playerLayout.containsKey(var0.getName()) ? (MenuFormat) playerLayout.get(var0.getName()) : null;
-    }
-
-    public static String getPlayerMenuTitle(Player var0) {
-        return playerLayout.containsKey(var0.getName()) ? ((MenuFormat) playerLayout.get(var0.getName())).name : null;
+    public static MenuFormat getFormat(Player var0) {
+        return PLAYER_LAYOUT.containsKey(var0.getName()) ? PLAYER_LAYOUT.get(var0.getName()) : null;
     }
 
     public static void openMenu(Player p, String menuName) {
@@ -63,25 +61,25 @@ public class PlayerMenu extends BukkitRunnable {
             System.out.print("The menu: " + menuName + " Don't exist and the player: " + p.getName() + " Are trying to open!");
         } else {
             Inventory menu = InventoryUtil.init(p, menuFormat);
-            playerMenu.put(p.getName(), menu);
-            playerLayout.put(p.getName(), menuFormat);
+            PLAYER_MENU.put(p.getName(), menu);
+            PLAYER_LAYOUT.put(p.getName(), menuFormat);
             p.openInventory(menu);
         }
     }
 
     public static void updateMenu(Player var0, MenuFormat var1) {
-        if (playerLayout.containsKey(var0.getName())) {
-            playerLayout.put(var0.getName(), var1);
+        if (PLAYER_LAYOUT.containsKey(var0.getName())) {
+            PLAYER_LAYOUT.put(var0.getName(), var1);
         }
 
     }
 
-    public static boolean isAreadyWithOneMenu(Player var0) {
-        return playerMenu.containsKey(var0.getName());
+    public static boolean isWithMenuHold(HumanEntity p) {
+        return PLAYER_MENU.containsKey(p.getName());
     }
 
     public static void quitPlayer(Player var0) {
-        playerMenu.remove(var0.getName());
-        playerLayout.remove(var0.getName());
+        PLAYER_MENU.remove(var0.getName());
+        PLAYER_LAYOUT.remove(var0.getName());
     }
 }

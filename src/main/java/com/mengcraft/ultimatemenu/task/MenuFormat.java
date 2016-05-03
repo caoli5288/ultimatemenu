@@ -4,7 +4,7 @@ import java.util.HashMap;
 
 public class MenuFormat {
     HashMap<Integer, MenuItemFormat> itemMap = new HashMap<>();
-    String name;
+    public String name;
     int slot;
 
     public void setItemMap(HashMap<Integer, MenuItemFormat> itemMap) {

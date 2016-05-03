@@ -7,12 +7,12 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-public class InventoryCloseaListener implements Listener {
+public class InventoryCloseListener implements Listener {
    @EventHandler
    public void onClose(InventoryCloseEvent var1) {
       if(var1.getPlayer() instanceof Player) {
          Player var2 = (Player)var1.getPlayer();
-         if(PlayerMenu.isAreadyWithOneMenu(var2)) {
+         if(PlayerMenu.isWithMenuHold(var2)) {
             PlayerMenu.quitPlayer(var2);
          }
       }
@@ -22,7 +22,7 @@ public class InventoryCloseaListener implements Listener {
    @EventHandler
    public void onLeave(PlayerQuitEvent var1) {
       Player var2 = var1.getPlayer();
-      if(PlayerMenu.isAreadyWithOneMenu(var2)) {
+      if(PlayerMenu.isWithMenuHold(var2)) {
          PlayerMenu.quitPlayer(var2);
       }
 

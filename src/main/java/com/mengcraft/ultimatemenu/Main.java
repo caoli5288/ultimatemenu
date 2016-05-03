@@ -3,7 +3,7 @@ package com.mengcraft.ultimatemenu;
 import com.mengcraft.ultimatemenu.listener.Mobs;
 import com.mengcraft.ultimatemenu.listener.MobsListener;
 import com.mengcraft.ultimatemenu.listener.SchedulerFix;
-import com.mengcraft.ultimatemenu.listener.InventoryCloseaListener;
+import com.mengcraft.ultimatemenu.listener.InventoryCloseListener;
 import com.mengcraft.ultimatemenu.listener.InventoryListener;
 import com.mengcraft.ultimatemenu.task.MenuManager;
 import com.mengcraft.ultimatemenu.task.PlayerMenu;
@@ -59,7 +59,7 @@ public class Main extends JavaPlugin implements Listener {
       }
 
       PluginManager var8 = Bukkit.getPluginManager();
-      var8.registerEvents(new InventoryCloseaListener(), this);
+      var8.registerEvents(new InventoryCloseListener(), this);
       var8.registerEvents(new InventoryListener(), this);
       var8.registerEvents(new MobsListener(), this);
       Mobs.LoadMobs();
