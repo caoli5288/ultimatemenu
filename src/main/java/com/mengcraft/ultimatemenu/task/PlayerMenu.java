@@ -11,6 +11,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import javax.annotation.Nonnull;
+
 public class PlayerMenu extends BukkitRunnable {
 
     private static final HashMap<String, Inventory> PLAYER_MENU = new HashMap<>();

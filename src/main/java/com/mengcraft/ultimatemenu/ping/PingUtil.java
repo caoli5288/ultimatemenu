@@ -1,6 +1,5 @@
 package com.mengcraft.ultimatemenu.ping;
 
-import org.apache.commons.lang.time.StopWatch;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -8,9 +7,7 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.util.logging.Logger;
 
 import static org.bukkit.util.NumberConversions.toInt;
 
