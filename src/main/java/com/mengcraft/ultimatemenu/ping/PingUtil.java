@@ -26,9 +26,7 @@ final class PingUtil {
         StopWatch stop = new StopWatch();
         stop.start();
 
-        try (Socket socket = new Socket()) {
-            socket.connect(new InetSocketAddress(host, port), 1000);
-
+        try (Socket socket = new Socket(host, port)) {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             DataInputStream in = new DataInputStream(socket.getInputStream());
 

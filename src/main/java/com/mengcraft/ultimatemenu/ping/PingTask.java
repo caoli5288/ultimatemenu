@@ -15,7 +15,7 @@ public class PingTask extends BukkitRunnable {
     }
 
     private void process() {
-        ServerInfo.getServerMap().forEach((s, info) -> {
+        ServerInfo.getServerMap().values().parallelStream().forEach(info -> {
             PingResponse response = PingUtil.ping(info.host, info.port);
             if (response.valid()) {
                 info.wrap(response);
