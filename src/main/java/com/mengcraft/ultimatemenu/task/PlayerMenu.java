@@ -10,15 +10,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class PlayerMenu extends BukkitRunnable {
-    private static HashMap PlayerMenu = new HashMap();
-    private static HashMap PlayerLayout = new HashMap();
+
+    private static HashMap playerMenu = new HashMap();
+    private static HashMap playerLayout = new HashMap();
 
     public void run() {
-        HashSet var1 = new HashSet(PlayerMenu.keySet());
+        HashSet var1 = new HashSet(playerMenu.keySet());
         HashMap var2 = new HashMap();
         HashMap var3 = new HashMap();
-        var2.putAll(PlayerMenu);
-        var3.putAll(PlayerLayout);
+        var2.putAll(playerMenu);
+        var3.putAll(playerLayout);
         if (!var1.isEmpty()) {
             Iterator var5 = var1.iterator();
 
@@ -26,7 +27,7 @@ public class PlayerMenu extends BukkitRunnable {
                 String var4 = (String) var5.next();
                 Player var6 = Bukkit.getPlayerExact(var4);
                 if (var6 != null) {
-                    InventoryUpdater.getInvInfo(var6, (Inventory) var2.get(var4), (MenuFormat) var3.get(var4));
+                    InventoryUpdater.getInventory(var6, (Inventory) var2.get(var4), (MenuFormat) var3.get(var4));
                     var6.updateInventory();
                 }
             }
@@ -35,7 +36,7 @@ public class PlayerMenu extends BukkitRunnable {
     }
 
     public static void quitAllPlayers() {
-        Iterator var1 = PlayerMenu.keySet().iterator();
+        Iterator var1 = playerMenu.keySet().iterator();
 
         while (var1.hasNext()) {
             String var0 = (String) var1.next();
@@ -49,38 +50,38 @@ public class PlayerMenu extends BukkitRunnable {
     }
 
     public static MenuFormat getPlayerFormat(Player var0) {
-        return PlayerLayout.containsKey(var0.getName()) ? (MenuFormat) PlayerLayout.get(var0.getName()) : null;
+        return playerLayout.containsKey(var0.getName()) ? (MenuFormat) playerLayout.get(var0.getName()) : null;
     }
 
     public static String getPlayerMenuTitle(Player var0) {
-        return PlayerLayout.containsKey(var0.getName()) ? ((MenuFormat) PlayerLayout.get(var0.getName())).name : null;
+        return playerLayout.containsKey(var0.getName()) ? ((MenuFormat) playerLayout.get(var0.getName())).name : null;
     }
 
     public static void openMenu(Player p, String menuName) {
-        MenuFormat menuFormat = LoadMenu.getMenu(menuName);
+        MenuFormat menuFormat = MenuManager.MANAGER.getMenu(menuName);
         if (menuFormat == null) {
             System.out.print("The menu: " + menuName + " Don't exist and the player: " + p.getName() + " Are trying to open!");
         } else {
-            Inventory menu = InventoryUpdater.createInv(p, menuFormat);
-            PlayerMenu.put(p.getName(), menu);
-            PlayerLayout.put(p.getName(), menuFormat);
+            Inventory menu = InventoryUpdater.init(p, menuFormat);
+            playerMenu.put(p.getName(), menu);
+            playerLayout.put(p.getName(), menuFormat);
             p.openInventory(menu);
         }
     }
 
-    public static void updatePlayerMenu(Player var0, MenuFormat var1) {
-        if (PlayerLayout.containsKey(var0.getName())) {
-            PlayerLayout.put(var0.getName(), var1);
+    public static void updateMenu(Player var0, MenuFormat var1) {
+        if (playerLayout.containsKey(var0.getName())) {
+            playerLayout.put(var0.getName(), var1);
         }
 
     }
 
     public static boolean isAreadyWithOneMenu(Player var0) {
-        return PlayerMenu.containsKey(var0.getName());
+        return playerMenu.containsKey(var0.getName());
     }
 
     public static void quitPlayer(Player var0) {
-        PlayerMenu.remove(var0.getName());
-        PlayerLayout.remove(var0.getName());
+        playerMenu.remove(var0.getName());
+        playerLayout.remove(var0.getName());
     }
 }

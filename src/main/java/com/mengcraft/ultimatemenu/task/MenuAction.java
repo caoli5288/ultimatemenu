@@ -10,7 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
-public class MenuFunction {
+public class MenuAction {
    public static Plugin pl;
 
    static {
@@ -20,13 +20,13 @@ public class MenuFunction {
    public static boolean Functions(Player var0, int var1) {
       MenuFormat var2 = PlayerMenu.getPlayerFormat(var0);
       if(var2.itemMap.keySet().contains(Integer.valueOf(var1))) {
-         ArrayList var3 = ((ItemFormat)var2.itemMap.get(Integer.valueOf(var1))).commandList;
+         ArrayList var3 = ((MenuItemFormat)var2.itemMap.get(Integer.valueOf(var1))).commandList;
          BungeeTP(var3, var0);
          asOP(var0, var3);
          asConsole(var3, var0);
          loadTitle(var3, var0);
          sendMessage(var0, var3);
-         if(((ItemFormat)var2.itemMap.get(Integer.valueOf(var1))).Close_On_Click) {
+         if(((MenuItemFormat)var2.itemMap.get(Integer.valueOf(var1))).Close_On_Click) {
             return true;
          }
       }

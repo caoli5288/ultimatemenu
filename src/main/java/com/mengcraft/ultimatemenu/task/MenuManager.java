@@ -1,36 +1,26 @@
 package com.mengcraft.ultimatemenu.task;
 
 import com.mengcraft.ultimatemenu.Main;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
+public class MenuManager {
 
-public class LoadMenu {
+    public static final MenuManager MANAGER = new MenuManager();
 
-    private static Plugin pl;
-    private static HashMap<String, MenuFormat> menuMap;
+    private HashMap<String, MenuFormat> menuMap = new HashMap<>();
 
-    static {
-        pl = Main.pl;
-        menuMap = new HashMap<>();
-    }
-
-    public static MenuFormat getMenu(String menuName) {
-        return menuMap.containsKey(menuName) ? menuMap.get(menuName) : null;
-    }
-
-    public static void load() {
+    public void load() {
         menuMap.clear();
 
         ArrayList<String> fileNameList = new ArrayList<>();
         ArrayList<String> menuNameList = new ArrayList<>();
 
-        File[] fileList = new File(pl.getDataFolder() + File.separator + "Menus").listFiles();
+        File[] fileList = new File(Main.pl.getDataFolder() + File.separator + "Menus").listFiles();
         for (File file : fileList != null ? fileList : new File[]{}) {
             if (fileNameList.contains(file.getName())) {
                 System.out.print("[UltimateMenu] You have 2 menu files with the name " + file.getName() + "!");
@@ -45,7 +35,7 @@ public class LoadMenu {
 
                 HashMap<String, Integer> slotMap = new HashMap<>();
 
-                ArrayList<ItemFormat> itemList = new ArrayList<>();
+                ArrayList<MenuItemFormat> itemList = new ArrayList<>();
                 ArrayList<String> itemNameList = new ArrayList<>();
 
                 for (String itemName : yml.getKeys(false)) {
@@ -65,7 +55,7 @@ public class LoadMenu {
                             throw new RuntimeException("Multiple slot " + slot + " on menu " + file.getName() + '!');
                         }
                         slotMap.put(itemName, slot);
-                        ItemFormat item = new ItemFormat();
+                        MenuItemFormat item = new MenuItemFormat();
                         item.id = file.getName() + "-" + itemName;
                         item.onlineNameList.addAll(yml.getStringList(itemName + ".Name_Online"));
                         item.offlineNameList.addAll(yml.getStringList(itemName + ".Name_Offline"));
@@ -94,7 +84,7 @@ public class LoadMenu {
                         }
 
                         if (yml.isSet(itemName + ".Motd_Full_Exp")) {
-                            item.motdField = yml.getString(itemName + ".Motd_Full_Exp");
+                            item.motdFull = yml.getString(itemName + ".Motd_Full_Exp");
                             item.idMotdFull = yml.getInt(itemName + ".ID_Motd_Full", 35);
                             item.dataMotdFull = yml.getInt(itemName + ".Data_Motd_Full", 1);
                             item.motdFullNameList.addAll(yml.getStringList(itemName + ".Name_Motd_Full"));
@@ -118,19 +108,23 @@ public class LoadMenu {
 
                         item.Show_Players_On_Item_Amount = yml.getBoolean(itemName + ".Show_Players_On_Item_Amount");
                         item.slot = yml.getInt(itemName + ".Slot");
-                        item.awaysOnline = yml.getBoolean(itemName + ".AwaysOnline");
+                        item.forceOnline = yml.getBoolean(itemName + ".AwaysOnline");
 
                         itemList.add(item);
                     }
                 }
 
-                for (ItemFormat item : itemList) {
+                for (MenuItemFormat item : itemList) {
                     format.itemMap.put(item.slot, item);
                 }
 
                 menuMap.put(file.getName().replace(".yml", ""), format);
             }
         }
+    }
+
+    public MenuFormat getMenu(String menuName) {
+        return menuMap.containsKey(menuName) ? menuMap.get(menuName) : null;
     }
 
     public static void config(FileConfiguration var0, File var1) {

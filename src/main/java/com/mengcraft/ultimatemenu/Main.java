@@ -5,7 +5,7 @@ import com.mengcraft.ultimatemenu.listener.MobsListener;
 import com.mengcraft.ultimatemenu.listener.SchedulerFix;
 import com.mengcraft.ultimatemenu.listener.InventoryCloseaListener;
 import com.mengcraft.ultimatemenu.listener.InventoryListener;
-import com.mengcraft.ultimatemenu.task.LoadMenu;
+import com.mengcraft.ultimatemenu.task.MenuManager;
 import com.mengcraft.ultimatemenu.task.PlayerMenu;
 import com.mengcraft.ultimatemenu.ping.PingTask;
 import com.mengcraft.ultimatemenu.ping.ServerInfo;
@@ -47,7 +47,7 @@ public class Main extends JavaPlugin implements Listener {
          if(!var5.isSet("Menu.Give_Item_On_Join")) {
             var5.addDefault("Menu.Menu_Name", "&aServers");
             var5.addDefault("Menu.Slots", Integer.valueOf(9));
-            LoadMenu.config(var5, var1);
+            MenuManager.config(var5, var1);
          }
 
          try {
@@ -68,7 +68,7 @@ public class Main extends JavaPlugin implements Listener {
       (new PlayerMenu()).runTaskTimerAsynchronously(this, 0L, (long)pl.getConfig().getInt("Menu_Update_Time"));
       (new PingTask()).runTaskTimerAsynchronously(this, 0L, (long)(pl.getConfig().getInt("Ping_Delay_Seconds") * 20));
       ServerInfo.init();
-      LoadMenu.load();
+      MenuManager.MANAGER.load();
       pl.getConfig().options().copyDefaults(true);
       pl.saveConfig();
    }
@@ -244,7 +244,7 @@ public class Main extends JavaPlugin implements Listener {
                   } else {
                      PlayerMenu.quitAllPlayers();
                      ServerInfo.init();
-                     LoadMenu.load();
+                     MenuManager.MANAGER.load();
                      var13.sendMessage("§aConfig reloaded!");
                      return false;
                   }

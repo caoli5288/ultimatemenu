@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class ServerInfo {
+
     private static HashMap<String, Info> serverMap = new HashMap<>();
     private static Plugin pl;
 
@@ -47,7 +48,7 @@ public class ServerInfo {
         return serverMap;
     }
 
-    public static double getServerLag(String var0) {
+    public static double getLag(String var0) {
         if (serverMap.containsKey(var0)) {
             return serverMap.get(var0).lag;
         } else {

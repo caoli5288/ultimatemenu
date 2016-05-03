@@ -1,6 +1,6 @@
 package com.mengcraft.ultimatemenu.listener;
 
-import com.mengcraft.ultimatemenu.task.MenuFunction;
+import com.mengcraft.ultimatemenu.task.MenuAction;
 import com.mengcraft.ultimatemenu.task.PlayerMenu;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +26,7 @@ public class InventoryListener implements Listener {
          }
 
          var1.setCancelled(true);
-         if(MenuFunction.Functions(var2, var1.getSlot())) {
+         if(MenuAction.Functions(var2, var1.getSlot())) {
             var2.closeInventory();
          }
       }

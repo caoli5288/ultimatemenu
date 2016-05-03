@@ -1,14 +1,12 @@
 package com.mengcraft.ultimatemenu.task;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class ItemFormat {
-
+public class MenuItemFormat {
     boolean Show_Players_On_Item_Amount;
     boolean Close_On_Click;
-    boolean awaysOnline;
+    boolean forceOnline;
     String id;
     int slot;
     int DATA_Full;
@@ -33,6 +31,5 @@ public class ItemFormat {
     int fullFrame = 0;
     int idMotdFull;
     int dataMotdFull;
-    String motdField;
-
+    String motdFull;
 }

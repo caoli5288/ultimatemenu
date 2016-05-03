@@ -1,24 +1,14 @@
-package com.mengcraft.ultimatemenu.text;
+package com.mengcraft.ultimatemenu;
 
-import com.mengcraft.ultimatemenu.Main;
 import com.mengcraft.ultimatemenu.ping.ServerInfo;
-import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.entity.Player;
 
-public class VariablesUtils {
+public class TextUtil {
     public static String getFinished(String raw, String serverId, Player var2) {
         raw = BungeeVariables(raw, serverId);
         raw = chatNormals(raw);
         raw = PlayerVars(raw, var2);
         return raw;
-    }
-
-    public static String varsAPI(String var0, Player var1) {
-        if (Main.Vars) {
-            var0 = PlaceholderAPI.setPlaceholders(var1, var0);
-        }
-
-        return var0;
     }
 
     public static String PlayerVars(String var0, Player var1) {
@@ -51,7 +41,7 @@ public class VariablesUtils {
     }
 
     public static String BungeeVariables(String var0, String var1) {
-        var0 = var0.replace("{Ping}", String.valueOf(ServerInfo.getServerLag(var1)));
+        var0 = var0.replace("{Ping}", String.valueOf(ServerInfo.getLag(var1)));
         var0 = var0.replace("{Online}", String.valueOf(ServerInfo.getServerOnline(var1)));
         if (ServerInfo.getServerMessage(var1) != null) {
             var0 = var0.replace("{Motd}", ServerInfo.getServerMessage(var1).replaceAll("&", "§"));
