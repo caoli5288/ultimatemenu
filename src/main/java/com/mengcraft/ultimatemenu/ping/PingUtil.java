@@ -23,9 +23,6 @@ final class PingUtil {
     public static PingResponse ping(String host, int port) {
         PingResponse response = new PingResponse();
 
-        StopWatch stop = new StopWatch();
-        stop.start();
-
         try (Socket socket = new Socket(host, port)) {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             DataInputStream in = new DataInputStream(socket.getInputStream());
@@ -50,8 +47,6 @@ final class PingUtil {
             out.write(EXIT);
             out.flush();
         } catch (Exception ignore) {
-        } finally {
-            response.setLag(stop.getTime());
         }
         return response;
     }

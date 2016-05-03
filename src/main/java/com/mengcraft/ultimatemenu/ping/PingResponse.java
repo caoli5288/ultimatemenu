@@ -7,7 +7,6 @@ public class PingResponse {
     private String message;
     private int max;
     private int online;
-    private long lag;
 
     public String getMessage() {
         return message;
@@ -34,14 +33,6 @@ public class PingResponse {
     public PingResponse setOnline(int online) {
         this.online = online;
         return this;
-    }
-
-    public long getLag() {
-        return lag;
-    }
-
-    public void setLag(long lag) {
-        this.lag = lag;
     }
 
     public boolean valid() {

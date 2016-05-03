@@ -41,8 +41,7 @@ public class TextUtil {
     }
 
     public static String BungeeVariables(String var0, String var1) {
-        var0 = var0.replace("{Ping}", String.valueOf(ServerInfo.getLag(var1)));
-        var0 = var0.replace("{Online}", String.valueOf(ServerInfo.getServerOnline(var1)));
+        var0 = var0.replace("{Online}", String.valueOf(ServerInfo.getOnline(var1)));
         if (ServerInfo.getServerMessage(var1) != null) {
             var0 = var0.replace("{Motd}", ServerInfo.getServerMessage(var1).replaceAll("&", "§"));
         }

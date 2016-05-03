@@ -55,8 +55,8 @@ public class InventoryUtil {
         byte data;
         int online;
 
-        if (format.Show_Players_On_Item_Amount && ServerInfo.getServerOnline(serverId) != -1) {
-            online = ServerInfo.getServerOnline(serverId);
+        if (format.Show_Players_On_Item_Amount && ServerInfo.getOnline(serverId) != -1) {
+            online = ServerInfo.getOnline(serverId);
         } else {
             online = 1;
         }
@@ -81,7 +81,7 @@ public class InventoryUtil {
 
             nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameName), serverId, p);
         } else {
-            if (ServerInfo.getLag(serverId) == -1) {
+            if (ServerInfo.getOnline(serverId) == -1) {
                 material = Material.getMaterial(format.ID_Offline);
                 data = (byte) format.DATA_Offline;
                 loreList = ((List) format.offlineMotd.get(format.offlineFrame)).iterator();
@@ -94,7 +94,7 @@ public class InventoryUtil {
 
                 nameLine = TextUtil.getFinished(format.offlineNameList.get(format.offlineFrameName), serverId, p);
             } else {
-                if (ServerInfo.getServerMax(serverId) == ServerInfo.getServerOnline(serverId) && !format.fullMotd.isEmpty() && !format.fullNameList.isEmpty()) {
+                if (ServerInfo.getServerMax(serverId) == ServerInfo.getOnline(serverId) && !format.fullMotd.isEmpty() && !format.fullNameList.isEmpty()) {
                     material = Material.getMaterial(format.ID_Full);
                     data = (byte) format.DATA_Full;
                     loreList = ((List) format.fullMotd.get(format.fullFrame)).iterator();
@@ -158,7 +158,7 @@ public class InventoryUtil {
 
             return format;
         } else {
-            if (ServerInfo.getLag(name) == -1.0D) {
+            if (ServerInfo.getOnline(name) == -1.0D) {
                 if (format.offlineMotd.size() - 1 == format.offlineFrame) {
                     format.offlineFrame = 0;
                 } else {
@@ -172,8 +172,8 @@ public class InventoryUtil {
                 }
             }
 
-            if (ServerInfo.getLag(name) != -1.0D) {
-                if (ServerInfo.getServerMax(name) == ServerInfo.getServerOnline(name)) {
+            if (ServerInfo.getOnline(name) != -1.0D) {
+                if (ServerInfo.getServerMax(name) == ServerInfo.getOnline(name)) {
                     if (format.fullMotd.size() - 1 == format.fullFrame) {
                         format.fullFrame = 0;
                     } else {

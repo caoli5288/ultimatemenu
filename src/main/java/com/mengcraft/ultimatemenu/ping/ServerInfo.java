@@ -48,15 +48,7 @@ public class ServerInfo {
         return serverMap;
     }
 
-    public static double getLag(String var0) {
-        if (serverMap.containsKey(var0)) {
-            return serverMap.get(var0).lag;
-        } else {
-            return -1;
-        }
-    }
-
-    public static int getServerOnline(String var0) {
+    public static int getOnline(String var0) {
         if (serverMap.containsKey(var0)) {
             return serverMap.get(var0).online;
         } else {
