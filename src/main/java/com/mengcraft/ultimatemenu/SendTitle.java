@@ -1,6 +1,5 @@
-package com.mengcraft.ultimatemenu.task;
+package com.mengcraft.ultimatemenu;
 
-import com.mengcraft.ultimatemenu.Main;
 import net.minecraft.server.v1_8_R3.IChatBaseComponent;
 import net.minecraft.server.v1_8_R3.PacketPlayOutTitle;
 import net.minecraft.server.v1_8_R3.PlayerConnection;
@@ -14,7 +13,7 @@ public class SendTitle {
    public static Plugin pl;
 
    static {
-      pl = Main.pl;
+      pl = Main.main;
    }
 
    public static void sendTitle(Player var0, String var1, String var2, int var3, int var4, int var5) {

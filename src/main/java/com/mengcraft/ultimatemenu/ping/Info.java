@@ -5,10 +5,9 @@ import net.md_5.bungee.api.ChatColor;
 public class Info {
     String host;
     int port;
-
     int online = -1;
-    String message;
     int max = -1;
+    String message;
 
     public String getMessage() {
         return message == null ? null : ChatColor.translateAlternateColorCodes('&', message);

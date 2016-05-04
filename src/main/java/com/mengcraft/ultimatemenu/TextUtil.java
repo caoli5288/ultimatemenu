@@ -4,18 +4,10 @@ import com.mengcraft.ultimatemenu.ping.ServerInfo;
 import org.bukkit.entity.Player;
 
 public class TextUtil {
-    public static String getFinished(String raw, String serverId, Player var2) {
+    public static String getFinished(String raw, String serverId) {
         raw = BungeeVariables(raw, serverId);
         raw = chatNormals(raw);
-        raw = PlayerVars(raw, var2);
         return raw;
-    }
-
-    public static String PlayerVars(String var0, Player var1) {
-        var0 = var0.replace("{PlayerName}", var1.getName());
-        var0 = var0.replace("{Level}", Integer.toString(var1.getLevel()));
-        var0 = var0.replace("{Health}", Double.toString(var1.getHealth()));
-        return var0;
     }
 
     public static String chatNormals(String var0) {

@@ -14,7 +14,7 @@ public class ServerInfo {
     private static Plugin pl;
 
     static {
-        pl = Main.pl;
+        pl = Main.main;
     }
 
     public static void init() {

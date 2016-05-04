@@ -1,4 +1,4 @@
-package com.mengcraft.ultimatemenu.task;
+package com.mengcraft.ultimatemenu.menu;
 
 import com.mengcraft.ultimatemenu.TextUtil;
 import com.mengcraft.ultimatemenu.ping.ServerInfo;
@@ -15,7 +15,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
-public class InventoryUtil {
+public class MenuUtil {
 
     public static final InventoryHolder HOLDER = new InventoryHolder() {
         @Override
@@ -24,33 +24,25 @@ public class InventoryUtil {
         }
     };
 
-    public static Inventory getInventory(Player p, Inventory content, MenuFormat format) {
-        HashMap<Integer, MenuItemFormat> itemMap = new HashMap<>();
-
-        format.getItemMap().forEach((slot, format1) -> {
-            ItemStack item = getItem(format1, format1.id, p);
-            itemMap.put(slot, updateInfo(format1, format1.id));
-            content.setItem(slot, item);
+    public static void update(MenuInfo menuInfo) {
+        menuInfo.getItemMap().forEach((slot, format) -> {
+            ItemStack item = getItem(format, format.id);
+            menuInfo.setItem(slot, item);
+            updateInfo(format, format.id);
         });
-
-        format.setItemMap(itemMap);
-        PlayerMenu.updateMenu(p, format);
-
-        return content;
     }
 
-    public static Inventory init(Player p, MenuFormat menuFormat) {
-        Inventory menu = Bukkit.createInventory(HOLDER, menuFormat.slot, menuFormat.name);
-        menuFormat.getItemMap().forEach((slot, format) -> {
-            ItemStack item = getItem(format, format.id, p);
+    public static Inventory toInventory(MenuInfo menuInfo) {
+        Inventory menu = Bukkit.createInventory(HOLDER, menuInfo.getSlot(), menuInfo.getName());
+        menuInfo.getItemMap().forEach((slot, format) -> {
+            ItemStack item = getItem(format, format.id);
             menu.setItem(slot, item);
             updateInfo(format, format.id);
         });
-        PlayerMenu.updateMenu(p, menuFormat);
         return menu;
     }
 
-    private static ItemStack getItem(MenuItemFormat format, String serverId, Player p) {
+    private static ItemStack getItem(ItemInfo format, String serverId) {
         Material material;
         byte data;
         int online;
@@ -75,11 +67,11 @@ public class InventoryUtil {
 
             while (loreList.hasNext()) {
                 loreLineRaw = loreList.next();
-                loreLine = TextUtil.getFinished(loreLineRaw, serverId, p);
+                loreLine = TextUtil.getFinished(loreLineRaw, serverId);
                 motdList.add(loreLine);
             }
 
-            nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameName), serverId, p);
+            nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameName), serverId);
         } else {
             if (ServerInfo.getOnline(serverId) == -1) {
                 material = Material.getMaterial(format.ID_Offline);
@@ -88,11 +80,11 @@ public class InventoryUtil {
 
                 while (loreList.hasNext()) {
                     loreLineRaw = loreList.next();
-                    loreLine = TextUtil.getFinished(loreLineRaw, serverId, p);
+                    loreLine = TextUtil.getFinished(loreLineRaw, serverId);
                     motdList.add(loreLine);
                 }
 
-                nameLine = TextUtil.getFinished(format.offlineNameList.get(format.offlineFrameName), serverId, p);
+                nameLine = TextUtil.getFinished(format.offlineNameList.get(format.offlineFrameName), serverId);
             } else {
                 if (ServerInfo.getServerMax(serverId) == ServerInfo.getOnline(serverId) && !format.fullMotd.isEmpty() && !format.fullNameList.isEmpty()) {
                     material = Material.getMaterial(format.ID_Full);
@@ -101,11 +93,11 @@ public class InventoryUtil {
 
                     while (loreList.hasNext()) {
                         loreLineRaw = loreList.next();
-                        loreLine = TextUtil.getFinished(loreLineRaw, serverId, p);
+                        loreLine = TextUtil.getFinished(loreLineRaw, serverId);
                         motdList.add(loreLine);
                     }
 
-                    nameLine = TextUtil.getFinished(format.fullNameList.get(format.fullFrameName), serverId, p);
+                    nameLine = TextUtil.getFinished(format.fullNameList.get(format.fullFrameName), serverId);
                 } else if (format.motdFull != null && ServerInfo.getServerMessage(serverId).contains(format.motdFull)) {
                     material = Material.getMaterial(format.motdFullId);
                     data = (byte) format.dataMotdFull;
@@ -113,11 +105,11 @@ public class InventoryUtil {
 
                     while (loreList.hasNext()) {
                         loreLineRaw = loreList.next();
-                        loreLine = TextUtil.getFinished(loreLineRaw, serverId, p);
+                        loreLine = TextUtil.getFinished(loreLineRaw, serverId);
                         motdList.add(loreLine);
                     }
 
-                    nameLine = TextUtil.getFinished(format.motdFullNameList.get(format.onlineFrameName), serverId, p);
+                    nameLine = TextUtil.getFinished(format.motdFullNameList.get(format.onlineFrameName), serverId);
                 } else {
                     material = Material.getMaterial(format.ID_Online);
                     data = (byte) format.DATA_Online;
@@ -125,11 +117,11 @@ public class InventoryUtil {
 
                     while (loreList.hasNext()) {
                         loreLineRaw = loreList.next();
-                        loreLine = TextUtil.getFinished(loreLineRaw, serverId, p);
+                        loreLine = TextUtil.getFinished(loreLineRaw, serverId);
                         motdList.add(loreLine);
                     }
 
-                    nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameName), serverId, p);
+                    nameLine = TextUtil.getFinished(format.onlineNameList.get(format.onlineFrameName), serverId);
                 }
             }
         }
@@ -142,7 +134,7 @@ public class InventoryUtil {
         return item;
     }
 
-    private static MenuItemFormat updateInfo(MenuItemFormat format, String name) {
+    private static ItemInfo updateInfo(ItemInfo format, String name) {
         if (format.forceOnline) {
             if (format.onlineMotd.size() - 1 == format.onlineFrame) {
                 format.onlineFrame = 0;

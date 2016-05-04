@@ -1,18 +1,63 @@
-package com.mengcraft.ultimatemenu.task;
+package com.mengcraft.ultimatemenu.menu;
 
 import com.mengcraft.ultimatemenu.Main;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 public class MenuManager {
 
     public static final MenuManager MANAGER = new MenuManager();
 
-    private HashMap<String, MenuFormat> menuMap = new HashMap<>();
+    private final Map<String, MenuInfo> menuMap;
+    private final Map<UUID, MenuInfo> viewMap;
+
+    private MenuManager(Map<String, MenuInfo> menuMap, Map<UUID, MenuInfo> viewMap) {
+        this.menuMap = menuMap;
+        this.viewMap = viewMap;
+    }
+
+    private MenuManager() {
+        this(new HashMap<>(), new HashMap<>());
+    }
+
+    public void openMenu(Player p, String menuName) {
+        if (menuMap.containsKey(menuName)) {
+            openMenu(p, menuMap.get(menuName));
+        }
+    }
+
+    private void openMenu(Player p, MenuInfo info) {
+        viewMap.put(p.getUniqueId(), info);
+        p.openInventory(info.getMenu());
+    }
+
+    public boolean hasOpened(HumanEntity p) {
+        return viewMap.containsKey(p.getUniqueId());
+    }
+
+    public MenuInfo getOpened(HumanEntity p) {
+        return viewMap.get(p.getUniqueId());
+    }
+
+    public void release(HumanEntity p) {
+        viewMap.remove(p.getUniqueId());
+    }
+
+    public void release() {
+        viewMap.clear();
+    }
+
+    public Map<String, MenuInfo> getMenuMap() {
+        return menuMap;
+    }
 
     public void load() {
         menuMap.clear();
@@ -20,7 +65,7 @@ public class MenuManager {
         ArrayList<String> fileNameList = new ArrayList<>();
         ArrayList<String> menuNameList = new ArrayList<>();
 
-        File[] fileList = new File(Main.pl.getDataFolder() + File.separator + "Menus").listFiles();
+        File[] fileList = new File(Main.main.getDataFolder() + File.separator + "Menus").listFiles();
         for (File file : fileList != null ? fileList : new File[]{}) {
             if (fileNameList.contains(file.getName())) {
                 System.out.print("[UltimateMenu] You have 2 menu files with the name " + file.getName() + "!");
@@ -29,13 +74,13 @@ public class MenuManager {
                 fileNameList.add(file.getName());
                 YamlConfiguration yml = YamlConfiguration.loadConfiguration(file);
 
-                MenuFormat format = new MenuFormat();
-                format.slot = yml.getInt("Menu.Slots");
-                format.name = yml.getString("Menu.Menu_Name").replaceAll("&", "§");
+                MenuInfo info = new MenuInfo();
+                info.setSlot(yml.getInt("Menu.Slots"));
+                info.setName(yml.getString("Menu.Menu_Name").replaceAll("&", "§"));
 
                 HashMap<String, Integer> slotMap = new HashMap<>();
 
-                ArrayList<MenuItemFormat> itemList = new ArrayList<>();
+                ArrayList<ItemInfo> itemList = new ArrayList<>();
                 ArrayList<String> itemNameList = new ArrayList<>();
 
                 for (String itemName : yml.getKeys(false)) {
@@ -55,7 +100,7 @@ public class MenuManager {
                             throw new RuntimeException("Multiple slot " + slot + " on menu " + file.getName() + '!');
                         }
                         slotMap.put(itemName, slot);
-                        MenuItemFormat item = new MenuItemFormat();
+                        ItemInfo item = new ItemInfo();
                         item.id = file.getName() + "-" + itemName;
                         item.onlineNameList.addAll(yml.getStringList(itemName + ".Name_Online"));
                         item.offlineNameList.addAll(yml.getStringList(itemName + ".Name_Offline"));
@@ -114,16 +159,16 @@ public class MenuManager {
                     }
                 }
 
-                for (MenuItemFormat item : itemList) {
-                    format.itemMap.put(item.slot, item);
+                for (ItemInfo item : itemList) {
+                    info.putItem(item.slot, item);
                 }
 
-                menuMap.put(file.getName().replace(".yml", ""), format);
+                menuMap.put(file.getName().replace(".yml", ""), info);
             }
         }
     }
 
-    public MenuFormat getMenu(String menuName) {
+    public MenuInfo getMenu(String menuName) {
         return menuMap.containsKey(menuName) ? menuMap.get(menuName) : null;
     }
 

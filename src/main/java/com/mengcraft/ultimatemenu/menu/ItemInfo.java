@@ -1,9 +1,9 @@
-package com.mengcraft.ultimatemenu.task;
+package com.mengcraft.ultimatemenu.menu;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MenuItemFormat {
+public class ItemInfo {
     boolean Show_Players_On_Item_Amount;
     boolean Close_On_Click;
     boolean forceOnline;

@@ -1,8 +1,9 @@
-package com.mengcraft.ultimatemenu.task;
+package com.mengcraft.ultimatemenu.menu;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.mengcraft.ultimatemenu.Main;
+import com.mengcraft.ultimatemenu.SendTitle;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -15,14 +16,14 @@ public class MenuAction {
     public static Plugin pl;
 
     static {
-        pl = Main.pl;
+        pl = Main.main;
     }
 
     public static boolean process(Player p, int slot) {
-        MenuFormat menu = PlayerMenu.getFormat(p);
-        boolean b = menu != null && menu.itemMap.containsKey(slot);
+        MenuInfo menu = MenuManager.MANAGER.getOpened(p);
+        boolean b = menu != null && menu.getItemMap().containsKey(slot);
         if (b) {
-            ArrayList<String> commandList = menu.itemMap.get(slot).commandList;
+            ArrayList<String> commandList = menu.getItemMap().get(slot).commandList;
             portal(commandList, p);
             executeBy(p, commandList);
             execute(commandList, p);
@@ -104,7 +105,7 @@ public class MenuAction {
                         System.out.print("[UltimateMenu] Title must have 5 Parts, Title, Subtitle,FadeIn,Stay,FadeOut");
                     }
                 } else {
-                    System.out.print("[UltimateMenu] Titles dont work on 1.7!");
+                    System.out.print("[UltimateMenu] Titles don't work on 1.7!");
                 }
             }
         }
