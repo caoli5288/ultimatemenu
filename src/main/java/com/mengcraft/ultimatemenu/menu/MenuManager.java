@@ -59,6 +59,15 @@ public class MenuManager {
         return menuMap;
     }
 
+    public void update() {
+        getMenuMap().values().forEach(menu -> {
+            if (menu.needUpdate()) {
+                menu.updateView();
+                menu.updateMenu();
+            }
+        });
+    }
+
     public void load() {
         menuMap.clear();
 

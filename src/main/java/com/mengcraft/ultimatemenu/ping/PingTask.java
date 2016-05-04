@@ -1,8 +1,9 @@
 package com.mengcraft.ultimatemenu.ping;
 
-import org.bukkit.scheduler.BukkitRunnable;
+import com.mengcraft.ultimatemenu.Main;
+import com.mengcraft.ultimatemenu.menu.MenuManager;
 
-public class PingTask extends BukkitRunnable {
+public class PingTask implements Runnable {
 
     private volatile boolean running;
 
@@ -23,6 +24,7 @@ public class PingTask extends BukkitRunnable {
                 info.init();
             }
         });
+        Main.runTask(() -> MenuManager.MANAGER.update());
     }
 
     private void setRunFinish() {

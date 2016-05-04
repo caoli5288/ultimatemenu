@@ -3,7 +3,6 @@ package com.mengcraft.ultimatemenu;
 import com.mengcraft.ultimatemenu.listener.InventoryCloseListener;
 import com.mengcraft.ultimatemenu.listener.InventoryListener;
 import com.mengcraft.ultimatemenu.menu.MenuManager;
-import com.mengcraft.ultimatemenu.menu.MenuUpdater;
 import com.mengcraft.ultimatemenu.ping.PingTask;
 import com.mengcraft.ultimatemenu.ping.ServerInfo;
 import org.bukkit.Bukkit;
@@ -52,12 +51,15 @@ public class Main extends JavaPlugin implements Listener {
         var8.registerEvents(new InventoryCloseListener(), this);
         var8.registerEvents(new InventoryListener(), this);
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-        getServer().getScheduler().runTaskTimer(this, new MenuUpdater(), 0, getConfig().getInt("Menu_Update_Time"));
-        new PingTask().runTaskTimerAsynchronously(this, 0L, getConfig().getInt("Ping_Delay_Seconds") * 20);
+        getServer().getScheduler().runTaskTimerAsynchronously(this, new PingTask(), 0, getConfig().getInt("Ping_Delay_Seconds") * 20);
         ServerInfo.init();
         MenuManager.MANAGER.load();
         getConfig().options().copyDefaults(true);
         saveConfig();
+    }
+
+    public static void runTask(Runnable task) {
+        main.getServer().getScheduler().runTask(main, task);
     }
 
     public static void CreateFile() {
