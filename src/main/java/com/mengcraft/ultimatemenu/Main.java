@@ -4,7 +4,7 @@ import com.mengcraft.ultimatemenu.listener.InventoryCloseListener;
 import com.mengcraft.ultimatemenu.listener.InventoryListener;
 import com.mengcraft.ultimatemenu.menu.MenuManager;
 import com.mengcraft.ultimatemenu.ping.PingTask;
-import com.mengcraft.ultimatemenu.ping.ServerInfo;
+import com.mengcraft.ultimatemenu.ping.InfoManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -52,7 +52,7 @@ public class Main extends JavaPlugin implements Listener {
         var8.registerEvents(new InventoryListener(), this);
         getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
         getServer().getScheduler().runTaskTimerAsynchronously(this, new PingTask(), 0, getConfig().getInt("Ping_Delay_Seconds") * 20);
-        ServerInfo.init();
+        InfoManager.MANAGER.init();
         MenuManager.MANAGER.load();
         getConfig().options().copyDefaults(true);
         saveConfig();
@@ -230,7 +230,7 @@ public class Main extends JavaPlugin implements Listener {
                             return false;
                         } else {
                             MenuManager.MANAGER.release();
-                            ServerInfo.init();
+                            InfoManager.MANAGER.init();
                             MenuManager.MANAGER.load();
                             p.sendMessage("§aConfig reloaded!");
                             return false;

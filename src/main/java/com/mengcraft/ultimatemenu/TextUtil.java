@@ -1,7 +1,6 @@
 package com.mengcraft.ultimatemenu;
 
-import com.mengcraft.ultimatemenu.ping.ServerInfo;
-import org.bukkit.entity.Player;
+import com.mengcraft.ultimatemenu.ping.InfoManager;
 
 public class TextUtil {
     public static String getFinished(String raw, String serverId) {
@@ -33,12 +32,12 @@ public class TextUtil {
     }
 
     public static String BungeeVariables(String var0, String var1) {
-        var0 = var0.replace("{Online}", String.valueOf(ServerInfo.getOnline(var1)));
-        if (ServerInfo.getServerMessage(var1) != null) {
-            var0 = var0.replace("{Motd}", ServerInfo.getServerMessage(var1).replaceAll("&", "§"));
+        var0 = var0.replace("{Online}", String.valueOf(InfoManager.MANAGER.getOnline(var1)));
+        if (InfoManager.MANAGER.getServerMessage(var1) != null) {
+            var0 = var0.replace("{Motd}", InfoManager.MANAGER.getServerMessage(var1).replaceAll("&", "§"));
         }
 
-        var0 = var0.replace("{Max}", String.valueOf(ServerInfo.getServerMax(var1)));
+        var0 = var0.replace("{Max}", String.valueOf(InfoManager.MANAGER.getServerMax(var1)));
         return var0;
     }
 }

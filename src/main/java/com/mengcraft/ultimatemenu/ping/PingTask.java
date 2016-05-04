@@ -16,7 +16,7 @@ public class PingTask implements Runnable {
     }
 
     private void process() {
-        ServerInfo.getServerMap().values().parallelStream().forEach(info -> {
+        InfoManager.MANAGER.getServerMap().values().parallelStream().forEach(info -> {
             PingResponse response = PingUtil.ping(info.host, info.port);
             if (response.valid()) {
                 info.wrap(response);

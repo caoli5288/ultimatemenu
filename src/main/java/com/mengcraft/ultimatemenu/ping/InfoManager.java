@@ -2,25 +2,29 @@ package com.mengcraft.ultimatemenu.ping;
 
 import com.mengcraft.ultimatemenu.Main;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.plugin.Plugin;
 
 import java.io.File;
 import java.util.HashMap;
 import java.util.Iterator;
 
-public class ServerInfo {
+public class InfoManager {
 
-    private static HashMap<String, Info> serverMap = new HashMap<>();
-    private static Plugin pl;
+    public static final InfoManager MANAGER = new InfoManager();
 
-    static {
-        pl = Main.main;
+    private final HashMap<String, Info> map;
+
+    public InfoManager() {
+        this(new HashMap<>());
     }
 
-    public static void init() {
-        serverMap.clear();
+    private InfoManager(HashMap<String, Info> map) {
+        this.map = map;
+    }
+
+    public void init() {
+        map.clear();
         File[] var3;
-        int var2 = (var3 = (new File(pl.getDataFolder() + File.separator + "Menus")).listFiles()).length;
+        int var2 = (var3 = (new File(Main.main.getDataFolder() + File.separator + "Menus")).listFiles()).length;
 
         for (int var1 = 0; var1 < var2; ++var1) {
             File var0 = var3[var1];
@@ -33,40 +37,40 @@ public class ServerInfo {
                     Info info = new Info();
                     info.host = conf.getString(var5 + ".Server_IP");
                     info.port = conf.getInt(var5 + ".Port");
-                    serverMap.put(var0.getName() + "-" + var5, info);
+                    map.put(var0.getName() + "-" + var5, info);
                 }
             }
         }
 
     }
 
-    public static void update(String server, Info info) {
-        serverMap.put(server, info);
+    public void update(String server, Info info) {
+        map.put(server, info);
     }
 
-    public static HashMap<String, Info> getServerMap() {
-        return serverMap;
+    public HashMap<String, Info> getServerMap() {
+        return map;
     }
 
-    public static int getOnline(String var0) {
-        if (serverMap.containsKey(var0)) {
-            return serverMap.get(var0).online;
+    public int getOnline(String var0) {
+        if (map.containsKey(var0)) {
+            return map.get(var0).online;
         } else {
             return -1;
         }
     }
 
-    public static int getServerMax(String var0) {
-        if (serverMap.containsKey(var0)) {
-            return serverMap.get(var0).max;
+    public int getServerMax(String var0) {
+        if (map.containsKey(var0)) {
+            return map.get(var0).max;
         } else {
             return -1;
         }
     }
 
-    public static String getServerMessage(String var0) {
-        if (serverMap.containsKey(var0)) {
-            return serverMap.get(var0).getMessage();
+    public String getServerMessage(String var0) {
+        if (map.containsKey(var0)) {
+            return map.get(var0).getMessage();
         } else {
             return "The message is disabled in this ico!";
         }
