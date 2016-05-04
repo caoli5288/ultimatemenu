@@ -1,18 +1,11 @@
 package com.mengcraft.ultimatemenu;
 
-import com.mengcraft.ultimatemenu.listener.Mobs;
-import com.mengcraft.ultimatemenu.listener.MobsListener;
-import com.mengcraft.ultimatemenu.listener.SchedulerFix;
 import com.mengcraft.ultimatemenu.listener.InventoryCloseListener;
 import com.mengcraft.ultimatemenu.listener.InventoryListener;
-import com.mengcraft.ultimatemenu.task.MenuManager;
-import com.mengcraft.ultimatemenu.task.PlayerMenu;
 import com.mengcraft.ultimatemenu.ping.PingTask;
 import com.mengcraft.ultimatemenu.ping.ServerInfo;
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
+import com.mengcraft.ultimatemenu.task.MenuManager;
+import com.mengcraft.ultimatemenu.task.PlayerMenu;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -22,6 +15,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main extends JavaPlugin implements Listener {
    public static boolean Vars = false;
@@ -61,10 +58,7 @@ public class Main extends JavaPlugin implements Listener {
       PluginManager var8 = Bukkit.getPluginManager();
       var8.registerEvents(new InventoryCloseListener(), this);
       var8.registerEvents(new InventoryListener(), this);
-      var8.registerEvents(new MobsListener(), this);
-      Mobs.LoadMobs();
       this.getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-      (new SchedulerFix()).runTaskTimer(this, 0L, 20L);
       (new PlayerMenu()).runTaskTimerAsynchronously(this, 0L, (long)pl.getConfig().getInt("Menu_Update_Time"));
       (new PingTask()).runTaskTimerAsynchronously(this, 0L, (long)(pl.getConfig().getInt("Ping_Delay_Seconds") * 20));
       ServerInfo.init();
@@ -95,7 +89,6 @@ public class Main extends JavaPlugin implements Listener {
 
    public void onDisable() {
       pl = null;
-      MobsListener.offServer();
    }
 
    public boolean onCommand(CommandSender var1, Command var2, String var3, String[] var4) {
@@ -210,7 +203,6 @@ public class Main extends JavaPlugin implements Listener {
                            var13.sendMessage("§a---------------------- Mobs ---------------------");
                            return false;
                         } else {
-                           Mobs.SpawnMobs(var13, var4[1], var4[2].replaceAll("&", "§"), var4[3], var4[4], var4[5], var4[6], var4[7], var4[8], var4[9]);
                            return false;
                         }
                      } else {
