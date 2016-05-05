@@ -8,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 
 public class InventoryListener implements Listener {
     @EventHandler
@@ -22,6 +23,10 @@ public class InventoryListener implements Listener {
     }
 
     private boolean isInventory(Inventory inventory) {
-        return inventory.getHolder().equals(MenuUtil.HOLDER);
+        return isInventory(inventory.getHolder());
+    }
+
+    private boolean isInventory(InventoryHolder holder) {
+        return holder != null && holder.equals(MenuUtil.HOLDER);
     }
 }
